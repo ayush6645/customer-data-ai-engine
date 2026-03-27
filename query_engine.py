@@ -89,8 +89,10 @@ def execute_query(intent: QueryIntent, df: pd.DataFrame) -> tuple[Any, pd.DataFr
             res = numeric_series.sum()
         elif itype == 'min':
             res = numeric_series.min()
+            filtered_df = filtered_df[pd.to_numeric(filtered_df[target], errors='coerce') == res]
         elif itype == 'max':
             res = numeric_series.max()
+            filtered_df = filtered_df[pd.to_numeric(filtered_df[target], errors='coerce') == res]
             
         return f"The {itype} of {target} is {res:,.2f}", filtered_df
 
