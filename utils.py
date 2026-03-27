@@ -7,9 +7,11 @@ class Condition(BaseModel):
     value: Any = Field(description="The value to filter by. Ensure correct typing (number for Budget, string for Location).")
 
 class QueryIntent(BaseModel):
-    intent_type: str = Field(description="Type of query: 'filter' (list rows), 'filter_count' (count rows), 'average', 'sum', 'min', 'max', 'summary'")
+    intent_type: str = Field(description="Type of query: 'filter' (list rows), 'filter_count', 'average', 'sum', 'min', 'max', 'summary', 'median', 'sort_top', 'sort_bottom'")
     conditions: List[Condition] = Field(default_factory=list, description="List of conditions to apply to the data. Keep empty if no filters are needed.")
     target_column: Optional[str] = Field(default=None, description="The column to perform the aggregation on. Should be a numerical column for math ops.")
+    limit: Optional[int] = Field(default=None, description="Used for Top N or Bottom N queries (e.g., limit=5 for 'top 5')")
+    nth: Optional[int] = Field(default=None, description="Used for 'Nth' largest/smallest queries (e.g., nth=2 for '2nd largest')")
 
 COLUMNS_SCHEMA = """
 Available Columns:

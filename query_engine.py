@@ -71,7 +71,7 @@ def execute_query(intent: QueryIntent, df: pd.DataFrame) -> tuple[Any, pd.DataFr
     if itype == 'filter_count':
         return f"Found {len(filtered_df)} matching records.", filtered_df
         
-    elif itype in ['average', 'sum', 'min', 'max']:
+    elif itype in ['average', 'sum', 'min', 'max', 'median']:
         target = intent.target_column
         if not target or target not in filtered_df.columns:
             if 'Budget (INR)' in filtered_df.columns:
@@ -93,8 +93,39 @@ def execute_query(intent: QueryIntent, df: pd.DataFrame) -> tuple[Any, pd.DataFr
         elif itype == 'max':
             res = numeric_series.max()
             filtered_df = filtered_df[pd.to_numeric(filtered_df[target], errors='coerce') == res]
+        elif itype == 'median':
+            res = numeric_series.median()
+            filtered_df = filtered_df[pd.to_numeric(filtered_df[target], errors='coerce') == res]
             
         return f"The {itype} of {target} is {res:,.2f}", filtered_df
+
+    elif itype in ['sort_top', 'sort_bottom']:
+        target = intent.target_column
+        if not target or target not in filtered_df.columns:
+            if 'Budget (INR)' in filtered_df.columns:
+                target = 'Budget (INR)'
+            else:
+                return "Error: Target column for sorting not specified or found.", filtered_df
+        
+        valid_df = filtered_df.dropna(subset=[target]).copy()
+        valid_df[target] = pd.to_numeric(valid_df[target], errors='coerce')
+        if valid_df.empty:
+            return f"Cannot sort {target} because it contains no numeric data.", filtered_df
+            
+        ascending = (itype == 'sort_bottom')
+        sorted_df = valid_df.sort_values(by=target, ascending=ascending)
+        
+        nth = intent.nth
+        limit = intent.limit or 1
+        
+        if nth and nth > 0 and nth <= len(sorted_df):
+            result_df = sorted_df.iloc[[nth - 1]]
+            val = result_df[target].iloc[0]
+            prefix = "lowest" if ascending else "highest"
+            return f"The {nth}th {prefix} value for {target} is {val:,.2f}", result_df
+        else:
+            result_df = sorted_df.head(limit)
+            return f"Found the top {len(result_df)} records for {target}.", result_df
 
     elif itype == 'summary':
         summary_info = [f"Total entities matching criteria: {len(filtered_df)}"]

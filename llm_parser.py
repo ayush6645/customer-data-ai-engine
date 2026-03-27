@@ -35,11 +35,13 @@ def parse_query_to_intent(query: str, chat_history: list, client: genai.Client) 
     
     You MUST output valid JSON ONLY matching exactly this Pydantic schema:
     {{
-       "intent_type": "filter | filter_count | average | sum | min | max | summary",
+       "intent_type": "filter | filter_count | average | sum | min | max | summary | median | sort_top | sort_bottom",
        "conditions": [
            {{"column": "Exact Column Name", "operator": "== | != | > | < | >= | <= | contains | near", "value": "value"}}
        ],
-       "target_column": "Column Name for math ops (null if none)"
+       "target_column": "Column Name for math ops (null if none)",
+       "limit": "Integer for top/bottom N items, like 5 for 'top 5' (null if none)",
+       "nth": "Integer for Nth largest/lowest item, like 2 for '2nd largest' (null if none)"
     }}
     """
 
