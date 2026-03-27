@@ -1,7 +1,7 @@
 # Chat with Customer Data Tool (Hybrid AI + BI Engine)
 
 ### 🌐 Live Demo & Walkthrough
-- **Live Implementation:** [Insert Hosted Link Here]
+- **Live Implementation:** [Live Demo](https://customer-data-ai-engine-git-447762288352.asia-south1.run.app/)
 - **Video Walkthrough:** [Watch the Screen Recording](https://drive.google.com/file/d/1pIs3EA1vWU5W4fjQmuW-09Joc_7iWw1O/view?usp=sharing)
 
 ## 🎯 Project Overview
