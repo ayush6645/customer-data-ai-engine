@@ -56,6 +56,8 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+        if "df" in message and message["df"] is not None:
+            st.dataframe(message["df"])
 
 # User input
 if prompt := st.chat_input("E.g: How many customers have budget > 90 lakhs?"):
@@ -103,4 +105,11 @@ if prompt := st.chat_input("E.g: How many customers have budget > 90 lakhs?"):
                 final_answer = f"Error processing query: {e}"
         
         message_placeholder.markdown(final_answer)
-        st.session_state.messages.append({"role": "assistant", "content": final_answer})
+        
+        # Save both text and structural table data into the session memory
+        save_df = filtered_df if (not filtered_df.empty and isinstance(filtered_df, pd.DataFrame)) else None
+        st.session_state.messages.append({
+            "role": "assistant", 
+            "content": final_answer,
+            "df": save_df
+        })

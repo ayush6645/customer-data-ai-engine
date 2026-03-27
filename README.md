@@ -2,7 +2,7 @@
 
 ### 🌐 Live Demo & Walkthrough
 - **Live Implementation:** [Insert Hosted Link Here]
-- **Video Walkthrough:** [Insert Google Drive Link Here]
+- **Video Walkthrough:** [Watch the Screen Recording](https://drive.google.com/file/d/1pIs3EA1vWU5W4fjQmuW-09Joc_7iWw1O/view?usp=sharing)
 
 ## 🎯 Project Overview
 This project fulfills the "Chat with Customer Data" assignment. It provides a natural language interface to query and summarize an Excel dataset of customer real estate leads.
